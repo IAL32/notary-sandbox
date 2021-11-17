@@ -1,0 +1,3 @@
+[submodule "notary"]
+	path = notary
+	url = git@github.com:notaryproject/notary.git

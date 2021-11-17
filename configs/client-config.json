@@ -1,0 +1,9 @@
+{
+    "trust_dir": "~/.docker/trust",
+    "remote_server": {
+        "url": "https://notaryserver:4443",
+        "root_ca": "/notary/fixtures/root-ca.crt",
+        "tls_client_cert": "/notary/fixtures/secure.example.com.crt",
+        "tls_client_key": "/notary/fixtures/secure.example.com.key"
+    }
+}
