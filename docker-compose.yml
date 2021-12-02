@@ -16,7 +16,7 @@ services:
     command: |-
       sh -c "/notarydir/migrations/migrate.sh &&
       cd /notarydir/fixtures &&
-      notary-server -config=/notarydir/fixtures/server-config-local.json"
+      notary-server -config=server-config-local.json"
 
   signer:
     image: notary:signer-0.6.1-2
@@ -30,9 +30,34 @@ services:
     command: |-
       sh -c "/notarydir/migrations/migrate.sh &&
       cd /notarydir/fixtures &&
-      notary-signer -config=/notarydir/fixtures/signer-config-local.json"
+      notary-signer -config=signer-config-local.json"
 
-  trustsandbox:
+  trustsandbox-admin:
+    image: docker:dind
+    networks:
+      - sandbox
+    volumes:
+      - ./notary:/notary
+    privileged: true
+    container_name: trustsandbox-admin
+    depends_on:
+      - sandboxregistry
+    environment:
+      NOTARY_ROOT_PASSPHRASE: root-passphrase
+      NOTARY_TARGETS_PASSPHRASE: targets-passphrase
+      NOTARY_SNAPSHOT_PASSPHRASE: snapshot-passphrase
+    entrypoint: ""
+    command: |-
+        sh -c '
+            cp /notary/fixtures/root-ca.crt /usr/local/share/ca-certificates/root-ca.crt &&
+            update-ca-certificates &&
+            wget https://github.com/notaryproject/notary/releases/download/v0.6.1/notary-Linux-amd64 -O /opt/notary &&
+            chmod +x /opt/notary &&
+            ln -s /opt/notary /usr/bin/notary &&
+            echo "alias notary=\"notary -s https://notaryserver:4443\"" >> /etc/profile.d/alias.sh &&
+            dockerd-entrypoint.sh --insecure-registry registry:5000'
+
+  trustsandbox-delegate:
     image: docker:dind
     networks:
       - sandbox
