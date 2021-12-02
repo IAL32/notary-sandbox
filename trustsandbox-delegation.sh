@@ -36,5 +36,5 @@ cat delegation.crt
 
 # try after adding delegation to server using admin
 
-docker tag docker/trusttest registry:5000/collection/trusttest:latest
-docker push registry:5000/collection/trusttest:latest
+docker tag docker/trusttest sandboxregistry:5000/collection/trusttest:latest
+docker push sandboxregistry:5000/collection/trusttest:latest

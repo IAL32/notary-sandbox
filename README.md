@@ -44,8 +44,8 @@ docker exec -it trustsandbox-admin sh -l
 First, we need to initialize our keys. From inside the container, run
 
 ```
-notary init registry:5000/collection/trusttest
-notary publish registry:5000/collection/trusttest
+notary init sandboxregistry:5000/collection/trusttest
+notary publish sandboxregistry:5000/collection/trusttest
 ```
 
 Note that no passphrase will be asked. Normally, the Notary CLI will ask you to insert the passphrases for *root*, *targets* and *snapshot* roles. However, in [`docker-compose.yml`](https://github.com/IAL32/notary-sandbox/blob/main/docker-compose.yml) we have defined the following environment variables:
@@ -61,7 +61,7 @@ The Notary CLI will automatically use these passphrases to perform all operation
 [As stated in the official documentation](https://github.com/notaryproject/notary/blob/master/docs/best_practices.md#snapshot-key), we rotate the snapshot key to the Notary Signer for convenience. To do so, use:
 
 ```
-notary key rotate registry:5000/collection/trusttest snapshot -r
+notary key rotate sandboxregistry:5000/collection/trusttest snapshot -r
 ```
 
 There is no need to launch `notary publish <GUN>`, as the operation will be performed directly on the Notary Signer thanks to the `-r` flag.
@@ -142,8 +142,8 @@ echo "-----BEGIN CERTIFICATE-----
 And then add the delegation to the trusted certificates with:
 
 ```
-notary delegation add registry:5000/collection/trusttest targets/delegation-name /root/delegation.pem --all-paths
-notary publish registry:5000/collection/trusttest
+notary delegation add sandboxregistry:5000/collection/trusttest targets/delegation-name /root/delegation.pem --all-paths
+notary publish sandboxregistry:5000/collection/trusttest
 ```
 
 ### Pushing images
@@ -180,8 +180,8 @@ export DOCKER_CONTENT_TRUST=1
 Tag, and push the image to our registry:
 
 ```
-docker tag docker/trusttest registry:5000/collection/trusttest:latest
-docker push registry:5000/collection/trusttest:latest
+docker tag docker/trusttest sandboxregistry:5000/collection/trusttest:latest
+docker push sandboxregistry:5000/collection/trusttest:latest
 ```
 
 And it's done!
