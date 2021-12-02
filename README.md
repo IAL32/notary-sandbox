@@ -19,7 +19,7 @@ You need Docker and `docker-compose` installed. That's pretty much it.
 Just clone this repository locally with
 
 ```
-git clone git@github.com:IAL32/notary-sandbox.git
+git clone git@github.com:IAL32/notary-sandbox.git --recursive
 ```
 
 Then enter the directory and launch `docker-compose`
